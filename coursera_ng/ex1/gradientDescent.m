@@ -17,11 +17,15 @@ for iter = 1:num_iters
     % Hint: While debugging, it can be useful to print out the values
     %       of the cost function (computeCost) and gradient here.
     %
-    h = X * theta;
-    for item = 1:m
-        gradient = ((h(item) - y(item)).*X(item, :));
-        theta = theta - alpha * (1/m) * gradient';
-    end
+    
+%    h = X * theta;
+%    for item = 1:m
+%        gradient = ((h(item) - y(item)).*X(item, :));
+%        theta = theta - alpha * (1/m) * gradient';
+%    end
+    
+    theta = theta - (alpha/m) * (X' * (X * theta - y));
+    
     % ============================================================
 
     % Save the cost J in every iteration  
