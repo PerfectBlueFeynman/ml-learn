@@ -62,23 +62,77 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
+% Part 1
 
+%%I wrote this:
 
+%y_test = size(m, 10);
+%for i = 1:m
+%  y_test(i,y(i))=1;
+%end
+%Y = y_test;
 
+%better way to make y have 2 dimensions
+classify = eye(num_labels);
+Y = classify(y,:);
 
+a1 = [ones(m, 1) X]; % 5000x401
+z2 = a1 * Theta1'; % 5000x25
+a2 = sigmoid(z2);
+a2 = [ones(m, 1) a2]; % 5000x26
+z3 = a2 * Theta2'; % 5000x10
+a3 = sigmoid(z3);
+h = a3;
 
+J = -(1/m)*trace(Y*log(h') + (1-Y)*log(1-h'));
 
+Theta1_reg = Theta1;
+Theta1_reg(:,1) = []; % 25x400
+Theta2_reg = Theta2;
+Theta2_reg(:,1) = []; % 10x25
+J_reg = lambda/(2*m)*(sum(sum(Theta1_reg.^2))+sum(sum(Theta2_reg.^2)));
 
+J = J + J_reg;
 
+% Part 2
 
+D_1 = 0;
+D_2 = 0;
 
+%for t = 1:m
+%  x_t = a1(t,:);
+%  y_t = Y(t,:);
+%  a_1 = x_t; % 1x401
+%  z_2 = a_1 * Theta1'; % 1x25
+%  a_2 = sigmoid(z_2); % 1x25
+%  a_2_ = [1 a_2]; % 1x26
+%  z_3 = a_2_ * Theta2'; % 1x10
+%  a_3 = sigmoid(z_3); % 1x10
+%  h_t = a_3; % 1x10
+%
+%  delta_3 = h_t-y_t; % 1x10
+%  delta_2 = delta_3 * Theta2_reg.*(a_2).*(1-a_2); % 1x25
+%
+%  D_2 += (delta_3' * a_2_);
+%	D_1 += (delta_2' * a_1);
+%
+%end
+mask_2 = ones(size(Theta2));
+mask_1 = ones(size(Theta1));
+mask_2(:,1) = 0;
+mask_1(:,1) = 0;
 
+delta_3 = h-Y; % 5000x10
+delta_2 = delta_3 * Theta2_reg .* sigmoidGradient(z2); % 5000x25
 
+D_2 = delta_3' * a2;
+D_1 = delta_2' * a1;
 
+Theta2_grad = (1/m) * D_2;
+Theta1_grad = (1/m) * D_1;
 
-
-
-
+Theta2_grad += (lambda/m) * (Theta2.*mask_2);
+Theta1_grad += (lambda/m) * (Theta1.*mask_1);
 
 % -------------------------------------------------------------
 
