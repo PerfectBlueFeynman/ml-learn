@@ -24,10 +24,8 @@ idx = zeros(size(X,1), 1);
 distance = []
 
 for i = 1:K
-  cen = centroids(i,:);
-  centroid = repmat(cen, size(X,1), 1);
-  dist = (X-centroid).^2;
-  distance = [distance sum(dist,2)];
+  centroid = repmat(centroids(i,:), size(X,1), 1);
+  distance = [distance sum((X-centroid).^2,2)];
 
 [min_distance,idx] = min(distance');
 

@@ -26,12 +26,12 @@ centroids = zeros(K, n);
 % Note: You can use a for-loop over the centroids to compute this.
 %
 
-
-
-
-
-
-
+for i = 1:K
+  mask = find(idx==i);
+  num = size(mask, 1);
+  x = X(mask, :);
+  cen = sum(x)./num;
+  centroids(i,:) = cen;
 
 % =============================================================
 
