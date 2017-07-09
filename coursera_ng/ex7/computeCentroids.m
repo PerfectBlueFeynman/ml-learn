@@ -28,7 +28,7 @@ centroids = zeros(K, n);
 
 for i = 1:K
   mask = find(idx==i);
-  num = size(mask, 1);
+  num = length(mask);
   x = X(mask, :);
   cen = sum(x)./num;
   centroids(i,:) = cen;
